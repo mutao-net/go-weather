@@ -2,7 +2,6 @@ package weather
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 	"net/url"
@@ -42,17 +41,25 @@ type WeatherEntitys struct {
 	Icon        string `json:"icon"`
 }
 
-func GetWeather(appId string) {
-	req := setParams(appId)
+func GetWeather(appId string, lat string, lon string) ResponseResult {
+	req := setParams(appId, lat, lon)
 	result := callAPI(req)
-	fmt.Printf("result: %+v\n", result)
+	return result
 }
 
-func setParams(appId string) string {
+func setParams(appId string, lat string, lon string) string {
+	//default Tokyo
+	if len(lat) == 0 {
+		lat = "35.681236"
+	}
+	if len(lon) == 0 {
+		lon = "139.767125"
+	}
+
 	queries := []string{}
 	params := map[string]string{
-		"lat":   "35.681236",
-		"lon":   "139.767125",
+		"lat":   lat,
+		"lon":   lon,
 		"units": "metric",
 		"lang":  "ja",
 		"appid": appId}
